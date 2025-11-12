@@ -1,0 +1,69 @@
+{
+  "title": "DevOps Observability",
+  "timezone": "browser",
+  "schemaVersion": 39,
+  "version": 1,
+  "refresh": "10s",
+  "panels": [
+    {
+      "type": "stat",
+      "title": "Builds (Last 24h)",
+      "targets": [
+        {
+          "expr": "sum(increase(ci_pipeline_runs_total[24h]))"
+        }
+      ],
+      "gridPos": {"x":0,"y":0,"w":6,"h":4}
+    },
+    {
+      "type": "timeSeries",
+      "title": "Build Duration (s)",
+      "targets": [
+        {
+          "expr": "ci_last_build_duration_seconds"
+        }
+      ],
+      "gridPos": {"x":6,"y":0,"w":12,"h":8}
+    },
+    {
+      "type": "timeSeries",
+      "title": "App Request Rate",
+      "targets": [
+        {
+          "expr": "sum by (endpoint) (rate(app_requests_total[1m]))"
+        }
+      ],
+      "gridPos": {"x":0,"y":8,"w":12,"h":8}
+    },
+    {
+      "type": "timeSeries",
+      "title": "App Latency (p95)",
+      "targets": [
+        {
+          "expr": "histogram_quantile(0.95, sum(rate(app_request_latency_seconds_bucket[5m])) by (le, endpoint))"
+        }
+      ],
+      "gridPos": {"x":12,"y":8,"w":12,"h":8}
+    },
+    {
+      "type": "timeSeries",
+      "title": "CPU Usage (node)",
+      "targets": [
+        {
+          "expr": "100 - (avg by (instance)(irate(node_cpu_seconds_total{mode=\"idle\"}[5m])) * 100)"
+        }
+      ],
+      "gridPos": {"x":0,"y":16,"w":12,"h":8}
+    },
+    {
+      "type": "timeSeries",
+      "title": "Memory Usage (node)",
+      "targets": [
+        {
+          "expr": "1 - (node_memory_MemAvailable_bytes / node_memory_MemTotal_bytes)"
+        }
+      ],
+      "gridPos": {"x":12,"y":16,"w":12,"h":8}
+    }
+  ]
+}
