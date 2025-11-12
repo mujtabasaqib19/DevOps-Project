@@ -50,7 +50,6 @@ jobs:
           username: ubuntu
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
-            cd ~/DevOps\ Project/monitoring
             sudo docker pull ${{ secrets.DOCKERHUB_USERNAME }}/devops-demo-app:latest
             sudo docker stop demo-app || true
             sudo docker rm demo-app || true
